@@ -1,6 +1,6 @@
 # s3lurp - Browser Uploads Direct to S3
 
-sane direct s3 uploads
+direct s3 upload form helper
 
 ## Installation
 
@@ -18,7 +18,7 @@ Or install it yourself as:
 
 ## Usage
 
-usage.
+TODO: documentation
 
 ## Contributing
 

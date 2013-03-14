@@ -1,0 +1,4 @@
+s3_bucket: "yml_bucket"
+s3_key: "yml_key"
+s3_secret: "yml_secret"
+

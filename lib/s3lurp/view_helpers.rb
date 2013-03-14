@@ -22,16 +22,15 @@ module S3lurp
       secret = options[:s3_secret] || S3lurp.config.s3_secret
       minutes = Integer(options[:minutes_valid]) rescue 360
       expiration_date = minutes.minutes.from_now.utc.strftime('%Y-%m-%dT%H:%M:%S.000Z')
-      hidden_fields = {}
 
       # configurable fields the field map is formed as {:configuration_name => "input_field_name"}
+      hidden_fields = {}
       FIELD_MAP.each do |k,v|
         hidden_fields[k] = options[k] || S3lurp.config.send(k.to_s.underscore.to_sym)
       end
       hidden_fields.delete_if{|k,v| v.nil? || v.empty?}
 
       amz_meta_tags = options[:amz_meta_tags].is_a?(Hash) ? s3_generate_amz_meta_tags(options[:amz_meta_tags]) : {}
-      hidden_fields.merge!(amz_meta_tags)
 
       security_fields = {}
       if hidden_fields[:s3_key] # only generate security fields when necessary

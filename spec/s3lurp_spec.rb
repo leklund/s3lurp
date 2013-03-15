@@ -18,9 +18,9 @@ describe S3lurp::ViewHelpers do
       config.s3_secret_key = nil
     end
     form = view.s3_direct_form_tag({:key => '/files/s3lurp/lib/s3lurp.rb'})
-    (!!form.match(/<form /)).should be_true
-    (!!form.match(/\<input.*?name="key".*?>/).to_s.match(/type="hidden"/)).should be_true
-    (!!form.match(/\<input.*?name="file".*?>/).to_s.match(/type="file"/)).should be_true
+    (!!form.match(/<form.*?>/)).should be_true
+    form.should include(%(name="key"), %(type="hidden"))
+    form.should include(%(name="file"), %(type="file"))
   end
 
   it "should return a form with a policy and signature and my meta tags" do
@@ -43,15 +43,16 @@ describe S3lurp::ViewHelpers do
       },
       :form_html_options => {:class => "myclass", :id => "s3lurp_form"}
     })
-    (!!form.match(/<form /)).should be_true
-    (!!form.match(/\<form.*?class="myclass"/)).should be_true
-    (!!form.match(/\<form.*?id="s3lurp_form"/)).should be_true
-    (!!form.match(/\<input.*?name="key".*?>/).to_s.match(/value="\/some\/key\.pl"/)).should be_true
-    (!!form.match(/\<input.*?name="file".*?>/).to_s.match(/type="file"/)).should be_true
-    (!!form.match(/\<input.*?name="policy".*?>/).to_s.match(/type="hidden"/)).should be_true
-    (!!form.match(/\<input.*?name="x-amz-meta-foo".*?>/).to_s.match(/value="bar"/)).should be_true
-    (!!form.match(/\<input.*?name="x-amz-meta-parent_id".*?>/).to_s.match(/value="42"/)).should be_true
-    (!!form.match(/\<input.*?name="Content-Disposition".*?>/).to_s.match(/type="hidden"/)).should be_true 
+    (!!form.match(/<form.*?>/)).should be_true
+    form.should include(%(class="myclass"))
+    form.should include(%(id="s3lurp_form"))
+    form.should include(%(name="key"), %(value="/some/key.pl"))
+    form.should include(%(name="file"), %(type="file"))
+    form.should include(%(name="policy"), %(type="hidden"))
+    form.should include(%(name="x-amz-meta-foo"), %(value="bar"))
+    form.should include(%(name="x-amz-meta-parent_id"), %(value="42"))
+    form.should include(%(name="Content-Disposition"), %(type="hidden"), %(value="attachment"))
+
   end
 
   it 'should return valid json from the generate policy method and should have the keys I send it' do

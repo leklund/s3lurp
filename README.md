@@ -18,6 +18,25 @@ Or install it yourself as:
 
 ## Usage
 
+### Configuration
+
+in config/initializers/s3lurp.rb
+
+```ruby
+S3lurp.configure do |config|
+  config.s3_bucket = "bucket_of_holding"
+  config.s3_key = "S3_PUBLICK_KEY"
+  config.s3_key = "S3_SECRET_KEY"
+```
+
+### View Helper
+
+The meat of this gem is the view helper: s3_direct_form_tag
+
+```ruby
+= s3_direct_form_tag({:key => '/posts/@post_id/photos/uuid/${filename}'})
+```
+
 TODO: documentation
 
 ## Contributing

@@ -25,11 +25,12 @@ describe S3lurp::ViewHelpers do
 
   it "should return a form with a policy and signature and my meta tags" do
     S3lurp.configure do |config|
-      config.key = "/some/key.pl"
       config.s3_bucket = "bucket_o_stuff"
+      config.s3_access_key = 'oingoboingo'
       config.s3_secret_key = "qwerty5678_"
     end
     form = view.s3_direct_form_tag({
+      :key => '/some/key.pl',
       :acl => 'public-read',
       :success_action_redirect => 'http://foobar.com/thanks',
       :success_action_status => 204,
@@ -47,6 +48,7 @@ describe S3lurp::ViewHelpers do
     form.should include(%(class="myclass"))
     form.should include(%(id="s3lurp_form"))
     form.should include(%(name="key"), %(value="/some/key.pl"))
+    form.should include(%(name="AWSAccessKeyId"), %(value="oingoboingo"))
     form.should include(%(name="file"), %(type="file"))
     form.should include(%(name="policy"), %(type="hidden"))
     form.should include(%(name="x-amz-meta-foo"), %(value="bar"))

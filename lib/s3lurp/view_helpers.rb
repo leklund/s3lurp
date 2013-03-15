@@ -42,7 +42,7 @@ module S3lurp
       if hidden_fields[:s3_access_key] # only generate security fields when necessary
         security_fields[:policy] = Base64.encode64(
           s3_generate_policy(
-            hidden_fields,
+            hidden_fields.clone,
             { :meta_tags => amz_meta_tags,
               :s3_bucket => options[:s3_bucket],
               :expiration => expiration_date,

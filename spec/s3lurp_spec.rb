@@ -78,6 +78,11 @@ describe S3lurp::ViewHelpers do
       .should == %(<input type="submit" value="Upload" />)
   end
 
+  it 'should generate file field tag with and without accept=' do
+    view.s3_generate_file_field_tag().should_not include("accept")
+    view.s3_generate_file_field_tag({:file_field_tag_accept => "image/*"}).should include('accept="image/*"')
+  end
+
 
 end
 

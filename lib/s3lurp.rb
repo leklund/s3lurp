@@ -32,7 +32,7 @@ module S3lurp
       :success_action_redirect, :success_action_status,
       :min_file_size, :max_file_size,
       :amz_meta_tags, :minutes_valid,
-      :form_html_options,
+      :form_html_options, :file_field_tag_accept,
       :submit_tag, :submit_tag_value, :submit_tag_options,
       :file, :key
 

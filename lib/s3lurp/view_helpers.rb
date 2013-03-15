@@ -19,8 +19,8 @@ module S3lurp
     NON_FIELD_OPTIONS = %w( s3_bucket s3_secret_key
                            max_file_size min_file_size
                            amz_meta_tags minutes_valid
-                           form_html_options submit_tag
-                           submit_tag_value submit_tag_options).map(&:to_sym)
+                           form_html_options file_field_tag_accept
+                           submit_tag submit_tag_value submit_tag_options).map(&:to_sym)
 
     def s3_direct_form_tag(opt = {})
       options = (NON_FIELD_OPTIONS + HIDDEN_FIELD_MAP.keys).each_with_object({}) do |i, h|
@@ -59,11 +59,12 @@ module S3lurp
 
       amz_meta_tags.merge! security_fields
       submit = s3_generate_submit_tag(options)
+      file = s3_generate_file_field_tag(options)
       form_tag("http://s3.amazonaws.com/#{options[:s3_bucket]}",  {:authenticity_token => false, :method => 'POST', :multipart => true}.merge(options[:form_html_options])) do
         (
         hidden_fields.map{|k,v| hidden_field_tag(HIDDEN_FIELD_MAP[k],v, {:id => nil})}.join.html_safe +
         amz_meta_tags.map{|k,v| hidden_field_tag(k,v,{:id => nil})}.join.html_safe +
-        file_field_tag('file', :accept => "text/html") +
+        file +
         submit
         )
       end
@@ -108,6 +109,14 @@ module S3lurp
         submit_tag(opt[:submit_tag_value], opt[:submit_tag_options])
       else
         submit_tag("Upload", opt[:submit_tag_options])
+      end
+    end
+
+    def s3_generate_file_field_tag(opt ={})
+      if opt[:file_field_tag_accept]
+        file_field_tag('file', :accept => opt[:file_field_tag_accept])
+      else
+        file_field_tag('file')
       end
     end
 

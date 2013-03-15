@@ -64,8 +64,8 @@ module S3lurp
         (
         hidden_fields.map{|k,v| hidden_field_tag(HIDDEN_FIELD_MAP[k],v, {:id => nil})}.join.html_safe +
         amz_meta_tags.map{|k,v| hidden_field_tag(k,v,{:id => nil})}.join.html_safe +
-        file +
-        submit.html_safe
+        field_set_tag(nil,:class=>"s3lurp_file") {file} +
+        field_set_tag(nil,:class=>"s3lurp_submit") {submit.html_safe}
         )
       end
     end
@@ -114,9 +114,9 @@ module S3lurp
 
     def s3_generate_file_field_tag(opt ={})
       if opt[:file_field_tag_accept]
-        file_field_tag('file', :accept => opt[:file_field_tag_accept])
+        file_field_tag('file', :accept => opt[:file_field_tag_accept], :class => 's3lurp_file_tag')
       else
-        file_field_tag('file')
+        file_field_tag('file', :class => 's3lurp_file_tag')
       end
     end
 

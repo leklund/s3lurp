@@ -65,7 +65,7 @@ module S3lurp
         hidden_fields.map{|k,v| hidden_field_tag(HIDDEN_FIELD_MAP[k],v, {:id => nil})}.join.html_safe +
         amz_meta_tags.map{|k,v| hidden_field_tag(k,v,{:id => nil})}.join.html_safe +
         file +
-        submit
+        submit.html_safe
         )
       end
     end

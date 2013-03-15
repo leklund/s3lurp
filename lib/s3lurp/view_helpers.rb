@@ -74,7 +74,8 @@ module S3lurp
       fields.delete(:s3_access_key)
       conditions = [
         { :bucket => options[:s3_bucket]},
-        ['content-length-range', options[:min_file_size], options[:max_file_size]]
+        ['content-length-range', options[:min_file_size], options[:max_file_size]],
+        ['starts-with', '$utf8', ""]
       ]
       HIDDEN_FIELD_MAP.each do |field, field_name|
         next unless fields[field]

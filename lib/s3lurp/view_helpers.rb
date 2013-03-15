@@ -18,7 +18,8 @@ module S3lurp
     }
     NON_FIELD_OPTIONS = %w( s3_bucket s3_secret_key
                            max_file_size min_file_size
-                           amz_meta_tags minutes_valid ).map(&:to_sym)
+                           amz_meta_tags minutes_valid
+                           form_html_options ).map(&:to_sym)
 
     def s3_direct_form_tag(opt = {})
       options = (NON_FIELD_OPTIONS + HIDDEN_FIELD_MAP.keys).each_with_object({}) do |i, h|
@@ -44,8 +45,8 @@ module S3lurp
             { :meta_tags => amz_meta_tags,
               :s3_bucket => options[:s3_bucket],
               :expiration => expiration_date,
-              :min_file_size => options[:min_file_size] || 0,
-              :max_file_size => options[:max_file_size] || 10.megabytes
+              :min_file_size => options[:min_file_size],
+              :max_file_size => options[:max_file_size]
             }
         )).gsub(/\n/,'')
         security_fields[:signature] = Base64.encode64(
@@ -56,7 +57,7 @@ module S3lurp
       end
 
       amz_meta_tags.merge! security_fields
-      form_tag("http://s3.amazonaws.com/#{options[:s3_bucket]}",  :authenticity_token => false, :class => "boing", :method => 'POST', :multipart => true) do
+      form_tag("http://s3.amazonaws.com/#{options[:s3_bucket]}",  {:authenticity_token => false, :method => 'POST', :multipart => true}.merge(options[:form_html_options])) do
         (
         hidden_fields.map{|k,v| hidden_field_tag(HIDDEN_FIELD_MAP[k],v, {:id => nil})}.join.html_safe +
         amz_meta_tags.map{|k,v| hidden_field_tag(k,v,{:id => nil})}.join.html_safe +

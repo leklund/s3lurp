@@ -32,12 +32,18 @@ module S3lurp
       :success_action_redirect, :success_action_status,
       :min_file_size, :max_file_size,
       :amz_meta_tags, :minutes_valid,
+      :form_html_options,
       :file, :key
 
     def initialize
       @s3_bucket = ENV['S3_BUCKET'] || "S3_BUCKET"
       @s3_access_key = ENV['S3_ACCESS_KEY'] || "S3_KEY"
       @s3_secret_key = ENV['S3_SECRET_KEY'] || "S3_SECRET"
+      @min_file_size = 0
+      @max_file_size = 10485760
+      @minutes_valid = 360
+      @form_html_options = {}
+
     end
 
   end

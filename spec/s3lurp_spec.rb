@@ -12,19 +12,18 @@ describe S3lurp::ViewHelpers do
   end
   view = ActionView::Base.new
 
-  it "should return a form tag with the proper action (using the bucket) and form options passed" do
-    S3lurp.configure do |config|
-    end
-    form = view.s3_direct_form_tag({:key => '/files/s3lurp/lib/s3lurp.rb'})
-  end
-
   it "should return a form with a minimum set of hidden fields for public buckets" do
     S3lurp.configure do |config|
       config.s3_access_key = nil
       config.s3_secret_key = nil
     end
     form = view.s3_direct_form_tag({:key => '/files/s3lurp/lib/s3lurp.rb'})
+    puts "----------------------------------------"
+    puts form
+
+    puts "----------------------------------------"
     (!!form.match(/<form /)).should be_true
+
     (!!form.match(/\<input.*?name="key".*?>/).to_s.match(/type="hidden"/)).should be_true
     (!!form.match(/\<input.*?name="file".*?>/).to_s.match(/type="file"/)).should be_true
   end
@@ -46,9 +45,12 @@ describe S3lurp::ViewHelpers do
       :amz_meta_tags => {
         :foo => "bar",
         :parent_id => 42
-      }
+      },
+      :form_html_options => {:class => "myclass", :id => "s3lurp_form"}
     })
     (!!form.match(/<form /)).should be_true
+    (!!form.match(/\<form.*?class="myclass"/)).should be_true
+    (!!form.match(/\<form.*?id="s3lurp_form"/)).should be_true
     (!!form.match(/\<input.*?name="key".*?>/).to_s.match(/value="\/some\/key\.pl"/)).should be_true
     (!!form.match(/\<input.*?name="file".*?>/).to_s.match(/type="file"/)).should be_true
     (!!form.match(/\<input.*?name="policy".*?>/).to_s.match(/type="hidden"/)).should be_true

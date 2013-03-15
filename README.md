@@ -25,8 +25,8 @@ in config/initializers/s3lurp.rb
 ```ruby
 S3lurp.configure do |config|
   config.s3_bucket = "bucket_of_holding"
-  config.s3_key = "S3_PUBLICK_KEY"
-  config.s3_key = "S3_SECRET_KEY"
+  config.s3_access_key = "S3_PUBLICK_KEY"
+  config.s3_secret_key = "S3_SECRET_KEY"
 ```
 
 ### View Helper

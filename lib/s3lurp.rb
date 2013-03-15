@@ -30,6 +30,8 @@ module S3lurp
     attr_accessor :s3_bucket, :s3_key, :s3_secret, :acl, :cache_control,
       :content_type, :content_disposition, :content_encoding, :expires,
       :success_action_redirect, :success_action_status,
+      :min_file_size, :max_file_size,
+      :amz_meta_tags, :minutes_valid,
       :file, :key
 
     def initialize

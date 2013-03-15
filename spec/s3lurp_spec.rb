@@ -32,19 +32,29 @@ describe S3lurp::ViewHelpers do
   it "should return a form with a policy and signature and my meta tags" do
     S3lurp.configure do |config|
       config.key = "/some/key.pl"
+      config.s3_bucket = "bucket_o_stuff"
+      config.s3_secret = "qwerty5678_"
     end
     form = view.s3_direct_form_tag({
-      :acl => 'public-read', 
+      :acl => 'public-read',
+      :success_action_redirect => 'http://foobar.com/thanks',
+      :success_action_status => 204,
+      :content_disposition => "attachment",
+      :min_file_size => 1024,
+      :max_file_size => 6291456,
+      :minutes_valid => 333,
       :amz_meta_tags => {
-        :foo => 'bar',
-        :object_id => 1234
-    }})
+        :foo => "bar",
+        :parent_id => 42
+      }
+    })
     (!!form.match(/<form /)).should be_true
     (!!form.match(/\<input.*?name="key".*?>/).to_s.match(/value="\/some\/key\.pl"/)).should be_true
     (!!form.match(/\<input.*?name="file".*?>/).to_s.match(/type="file"/)).should be_true
     (!!form.match(/\<input.*?name="policy".*?>/).to_s.match(/type="hidden"/)).should be_true
     (!!form.match(/\<input.*?name="x-amz-meta-foo".*?>/).to_s.match(/value="bar"/)).should be_true
-    (!!form.match(/\<input.*?name="x-amz-meta-object_id".*?>/).to_s.match(/value="1234"/)).should be_true
+    (!!form.match(/\<input.*?name="x-amz-meta-parent_id".*?>/).to_s.match(/value="42"/)).should be_true
+    (!!form.match(/\<input.*?name="Content-Disposition".*?>/).to_s.match(/type="hidden"/)).should be_true 
   end
 
   it 'should return valid json from the generate policy method and should have the keys I send it' do
@@ -57,6 +67,8 @@ describe S3lurp::ViewHelpers do
     key_cond = j["conditions"].select{|a| a[1] == '$key'}.first
     key_cond[2].should == "/foo/bar"
   end
+
+
 end
 
 describe S3lurp do

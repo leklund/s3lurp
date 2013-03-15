@@ -1,7 +1,6 @@
 require 'base64'
 require 'openssl'
 require 'digest/sha1'
-require 'pry'
 
 module S3lurp
   module ViewHelpers

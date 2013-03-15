@@ -33,6 +33,7 @@ module S3lurp
       :min_file_size, :max_file_size,
       :amz_meta_tags, :minutes_valid,
       :form_html_options,
+      :submit_tag, :submit_tag_value, :submit_tag_options,
       :file, :key
 
     def initialize
@@ -43,7 +44,7 @@ module S3lurp
       @max_file_size = 10485760
       @minutes_valid = 360
       @form_html_options = {}
-
+      @submit_tag_options = {}
     end
 
   end

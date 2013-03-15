@@ -18,12 +18,7 @@ describe S3lurp::ViewHelpers do
       config.s3_secret_key = nil
     end
     form = view.s3_direct_form_tag({:key => '/files/s3lurp/lib/s3lurp.rb'})
-    puts "----------------------------------------"
-    puts form
-
-    puts "----------------------------------------"
     (!!form.match(/<form /)).should be_true
-
     (!!form.match(/\<input.*?name="key".*?>/).to_s.match(/type="hidden"/)).should be_true
     (!!form.match(/\<input.*?name="file".*?>/).to_s.match(/type="file"/)).should be_true
   end
@@ -68,6 +63,19 @@ describe S3lurp::ViewHelpers do
     j["expiration"].should == "2013-03-14T21:16:51.000Z"
     key_cond = j["conditions"].select{|a| a[1] == '$key'}.first
     key_cond[2].should == "/foo/bar"
+  end
+
+  it 'should return a submit tag or return the submit tag passed' do
+    view.s3_generate_submit_tag({:submit_tag_value => "zootboot", :submit_tag_options => {}})\
+      .should == %(<input type="submit" value="zootboot" />)
+    view.s3_generate_submit_tag({:submit_tag_options => {:class => "noway"}})\
+      .should == %(<input class="noway" type="submit" value="Upload" />)
+    view.s3_generate_submit_tag({:submit_tag_value => "zootboot", :submit_tag_options => {:class => "noway"}})\
+      .should == %(<input class="noway" type="submit" value="zootboot" />)
+    view.s3_generate_submit_tag({:submit_tag => %(<input type=submit class="button" id="upload-button">), :submit_tag_options => {}})\
+      .should == %(<input type=submit class="button" id="upload-button">)
+    view.s3_generate_submit_tag({:submit_tag_options => {}})\
+      .should == %(<input type="submit" value="Upload" />)
   end
 
 

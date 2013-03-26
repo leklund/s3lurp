@@ -88,7 +88,9 @@ module S3lurp
         end
       end
       if options[:meta_tags]
-        conditions = conditions + options[:meta_tags].map{|k,v| {k => v}}
+        options[:meta_tags].each do |k,v|
+          conditions.push ["starts-with", "$#{k}", '']
+        end
       end
       policy = {
         "expiration" => options[:expiration],

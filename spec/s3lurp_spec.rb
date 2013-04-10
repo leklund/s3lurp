@@ -112,6 +112,17 @@ describe S3lurp do
     S3lurp.config.aws_secret_key.should == @secret
   end
 
+  it 'should also configure with legacy options' do
+    S3lurp.configure do |config|
+      config.s3_bucket = @bucket
+      config.s3_access_key = @key
+      config.s3_secret_key = @secret
+    end
+    S3lurp.config.s3_bucket.should == @bucket
+    S3lurp.config.aws_access_key.should == @key
+    S3lurp.config.aws_secret_key.should == @secret
+  end
+
   it 'should should always use ENV first for config' do
     ENV['S3_BUCKET'] = @bucket
     ENV['AWS_ACCESS_KEY'] = @key

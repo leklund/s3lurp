@@ -26,16 +26,16 @@ to the helper via a hash.
 There are three options required for buckets that are not public-write:
 
 * `s3_bucket` - The name of the bucket where files go
-* `s3_access_key` - This is your AWS Access Key ID
-* `s3_secret_ley` - Your AWS Secret Accss Key
+* `aws_access_key` - This is your AWS Access Key ID
+* `aws_secret_key` - Your AWS Secret Accss Key
 
 
 These three options can be set via a yaml config file, an initializer, or ENV vars.
 
 
     ENV['S3_BUCKET']
-    ENV['S3_ACCESS_KEY']
-    ENV['S3_SECRET_KEY']
+    ENV['AWS_ACCESS_KEY']
+    ENV['AWS_SECRET_KEY']
 
 Another way to set up these options is to us an initializer.
 
@@ -44,8 +44,8 @@ In config/initializers/s3lurp.rb
 ```ruby
 S3lurp.configure do |config|
   config.s3_bucket = "bucket_of_holding"
-  config.s3_access_key = "some_acces_key"
-  config.s3_secret_key = "keep_it_secret"
+  config.aws_access_key = "some_acces_key"
+  config.aws_secret_key = "keep_it_secret"
 ```
 
 Finally you can use use a yaml file to load the configuration.
@@ -58,12 +58,12 @@ end
 # config/s3lurp.yml
 development:
   s3_bucket: "dev_bucket"
-  s3_access_key: "dev_key"
-  s3_secret_key: "dev_secret"
+  aws_access_key: "dev_key"
+  aws_secret_key: "dev_secret"
 production:
   s3_bucket: "prod_bucket"
-  s3_access_key: "prod_key"
-  s3_secret_key: "prod_secret"
+  aws_access_key: "prod_key"
+  aws_secret_key: "prod_secret"
 ```
 
 Using a yaml conifg file allows you to use different settings for different
@@ -78,9 +78,9 @@ Setup your ENV variables for heroku and for local use.
 For more on Heroku config see here: https://devcenter.heroku.com/articles/config-vars
 
 ```
-$ heroku config:add S3_KEY=asdfg12345 S3_SECRET=qwertyu0987622`
-$ export S3_KEY=asdfg12345
-$ export S3_SECRET=qwertyu0987622
+$ heroku config:add AWS_ACCESS_KEY=asdfg12345 AWS_SECRET=qwertyu0987622`
+$ export AWS_ACCESS_KEY=asdfg12345
+$ export AWS_SECRET=qwertyu0987622
 ```
 
 Set up some defaults with an initialzer
@@ -114,8 +114,8 @@ to the helper in a hash.
 |--------------------------|-------------|
 |__:file__                 | Name of yaml file located in the config directory. Contains any of the options listed in this table. Should be set inside a configuration block via an initializer. |
 |__:s3\_bucket__           | AWS S3 bucket name where files will stored. Can also be configured via ENV['S3_BUCKET']. __Required__|
-|__:s3\_access\_key__      | AWS Access Key. Can also be configured via ENV['S3_ACCESS_KEY']. __Required for buckets that are not public-write.__|
-|__:s3\_secret\_key__      | AWS AWS Secret Accss Key. Can also be configured via ENV['S3_SECRET_KEY']. __Required for buckets that are not public-write.__|
+|__:aws\_access\_key__     | AWS Access Key. Can also be configured via ENV['AWS_ACCESS_KEY']. __Required for buckets that are not public-write.__|
+|__:aws\_secret\_key__     | AWS AWS Secret Accss Key. Can also be configured via ENV['AWS_SECRET_KEY']. __Required for buckets that are not public-write.__|
 |__:key__                  | This is the key for the S3 object. To use the filename of the upload, use the vairable ${filename} (see example). __Required__|
 |__:acl__                  | Sepecies an S3 access control list. Valid values: `private` `public-read` `public-read-write` `authenticated-read` `bucket-owner-read` `bucket-owner-full-control`. _Default_: `private` |
 |__:cache\_control__       | Refer to [S3 PUT Object documentation](http://docs.aws.amazon.com/AmazonS3/2006-03-01/API/RESTObjectPUT.html)|

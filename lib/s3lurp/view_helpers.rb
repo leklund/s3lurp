@@ -6,7 +6,7 @@ module S3lurp
   module ViewHelpers
     HIDDEN_FIELD_MAP= {
       :key => 'key',
-      :s3_access_key => 'AWSAccessKeyId',
+      :aws_access_key => 'AWSAccessKeyId',
       :acl => 'acl',
       :cache_control => 'Cache-Control',
       :content_type => 'Content-Type',
@@ -16,7 +16,7 @@ module S3lurp
       :success_action_redirect => 'success_action_redirect',
       :success_action_status => 'success_action_status'
     }
-    NON_FIELD_OPTIONS = %w( s3_bucket s3_secret_key
+    NON_FIELD_OPTIONS = %w( s3_bucket aws_secret_key
                            max_file_size min_file_size
                            amz_meta_tags minutes_valid
                            form_html_options file_field_tag_accept
@@ -39,7 +39,7 @@ module S3lurp
       expiration_date = minutes.minutes.from_now.utc.strftime('%Y-%m-%dT%H:%M:%S.000Z')
 
       security_fields = {}
-      if hidden_fields[:s3_access_key] # only generate security fields when necessary
+      if hidden_fields[:aws_access_key] # only generate security fields when necessary
         security_fields[:policy] = Base64.encode64(
           s3_generate_policy(
             hidden_fields.clone,
@@ -53,7 +53,7 @@ module S3lurp
         security_fields[:signature] = Base64.encode64(
           OpenSSL::HMAC.digest(
             OpenSSL::Digest::Digest.new('sha1'),
-            options[:s3_secret_key], security_fields[:policy])
+            options[:aws_secret_key], security_fields[:policy])
         ).gsub(/\n/,'')
       end
 
@@ -71,7 +71,7 @@ module S3lurp
     end
 
     def s3_generate_policy(fields = {}, options = {})
-      fields.delete(:s3_access_key)
+      fields.delete(:aws_access_key)
       conditions = [
         { :bucket => options[:s3_bucket]},
         ['content-length-range', options[:min_file_size], options[:max_file_size]],

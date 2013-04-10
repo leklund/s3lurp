@@ -4,7 +4,7 @@ require 's3lurp/railtie' if defined? ::Rails::Railtie
 
 module S3lurp
  VALID_CONFIG_KEYS = [
-      :s3_bucket, :s3_access_key, :s3_secret_key, :acl, :cache_control,
+      :s3_bucket, :aws_access_key, :aws_secret_key, :acl, :cache_control,
       :content_type, :content_disposition, :content_encoding, :expires,
       :success_action_redirect, :success_action_status,
       :min_file_size, :max_file_size,
@@ -37,8 +37,8 @@ module S3lurp
 
     def initialize
       @s3_bucket = ENV['S3_BUCKET'] || "S3_BUCKET"
-      @s3_access_key = ENV['S3_ACCESS_KEY'] || "S3_KEY"
-      @s3_secret_key = ENV['S3_SECRET_KEY'] || "S3_SECRET"
+      @aws_access_key = ENV['AWS_ACCESS_KEY'] || "AWS_KEY"
+      @aws_secret_key = ENV['AWS_SECRET_KEY'] || "AWS_SECRET"
       @min_file_size = 0
       @max_file_size = 10485760
       @minutes_valid = 360

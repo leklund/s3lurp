@@ -14,8 +14,8 @@ describe S3lurp::ViewHelpers do
 
   it "should return a form with a minimum set of hidden fields for public buckets" do
     S3lurp.configure do |config|
-      config.s3_access_key = nil
-      config.s3_secret_key = nil
+      config.aws_access_key = nil
+      config.aws_secret_key = nil
     end
     form = view.s3_direct_form_tag({:key => '/files/s3lurp/lib/s3lurp.rb'})
     (!!form.match(/<form.*?>/)).should be_true
@@ -26,8 +26,8 @@ describe S3lurp::ViewHelpers do
   it "should return a form with a policy and signature and my meta tags" do
     S3lurp.configure do |config|
       config.s3_bucket = "bucket_o_stuff"
-      config.s3_access_key = 'oingoboingo'
-      config.s3_secret_key = "qwerty5678_"
+      config.aws_access_key = 'oingoboingo'
+      config.aws_secret_key = "qwerty5678_"
     end
     form = view.s3_direct_form_tag({
       :key => '/some/key.pl',
@@ -104,24 +104,24 @@ describe S3lurp do
   it 'should configure with options' do
     S3lurp.configure do |config|
       config.s3_bucket = @bucket
-      config.s3_access_key = @key
-      config.s3_secret_key = @secret
+      config.aws_access_key = @key
+      config.aws_secret_key = @secret
     end
     S3lurp.config.s3_bucket.should == @bucket
-    S3lurp.config.s3_access_key.should == @key
-    S3lurp.config.s3_secret_key.should == @secret
+    S3lurp.config.aws_access_key.should == @key
+    S3lurp.config.aws_secret_key.should == @secret
   end
 
   it 'should should always use ENV first for config' do
     ENV['S3_BUCKET'] = @bucket
-    ENV['S3_ACCESS_KEY'] = @key
-    ENV['S3_SECRET_KEY'] = @secret
+    ENV['AWS_ACCESS_KEY'] = @key
+    ENV['AWS_SECRET_KEY'] = @secret
     S3lurp.configure do |config|
       # nothing
     end
     S3lurp.config.s3_bucket.should == @bucket
-    S3lurp.config.s3_access_key.should == @key
-    S3lurp.config.s3_secret_key.should == @secret
+    S3lurp.config.aws_access_key.should == @key
+    S3lurp.config.aws_secret_key.should == @secret
 
   end
 
@@ -130,8 +130,8 @@ describe S3lurp do
       config.file = 's3.yml'
     end
     S3lurp.config.s3_bucket.should == 'yml_bucket'
-    S3lurp.config.s3_access_key.should == 'yml_key'
-    S3lurp.config.s3_secret_key.should == 'yml_secret'
+    S3lurp.config.aws_access_key.should == 'yml_key'
+    S3lurp.config.aws_secret_key.should == 'yml_secret'
   end
 end
 

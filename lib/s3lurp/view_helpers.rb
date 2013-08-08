@@ -19,7 +19,7 @@ module S3lurp
     NON_FIELD_OPTIONS = %w( s3_bucket aws_secret_key
                            max_file_size min_file_size
                            amz_meta_tags minutes_valid
-                           form_html_options file_field_tag_accept
+                           form_html_options file_field_tag_accept multiple_files
                            submit_tag submit_tag_value submit_tag_options).map(&:to_sym)
 
     def s3_direct_form_tag(opt = {})
@@ -116,11 +116,10 @@ module S3lurp
     end
 
     def s3_generate_file_field_tag(opt ={})
-      if opt[:file_field_tag_accept]
-        file_field_tag('file', :accept => opt[:file_field_tag_accept], :class => 's3lurp_file_tag')
-      else
-        file_field_tag('file', :class => 's3lurp_file_tag')
-      end
+      opts = {:class => 's3lurp_file_tag'}
+      opts.merge!({:accept => opt[:file_field_tag_accept]}) if opt[:file_field_tag_accept]
+      opts.merge!({:multiple => true}) if opt[:multiple_files]
+      file_field_tag('file', opts)
     end
 
   end

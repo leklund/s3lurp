@@ -86,6 +86,9 @@ describe S3lurp::ViewHelpers do
     view.s3_generate_file_field_tag({:file_field_tag_accept => "image/*"}).should include('accept="image/*"')
   end
 
+  it 'should generate file field tag with multiple true' do
+    view.s3_generate_file_field_tag({:multiple_files => true}).should include('multiple')
+  end
 
 end
 

@@ -1,0 +1,15 @@
+v0.4.4
+
+* add multiple_files option to add multiple=true attribute to the file input
+
+v0.4.3
+
+* fix backwards compatibility
+
+v0.4.2
+
+* change s3_* authorization options to aws_*
+
+v0.4.1
+
+* initial release

@@ -131,6 +131,7 @@ to the helper in a hash.
 |__:minutes\_valid__       | Length of time in minutes that the generated form is valid. _Default:_ 360 |
 |__:form\_html\_options__  | Hash of additional options that is passed to the form_tag contructor. |
 |__:file\_field\_tag\_accept__ | Sets the accept parameter of the file field tag. [?](http://www.w3.org/TR/html-markup/input.file.html#input.file.attrs.accept) |
+|__:multiple\_files__      | Sets multiple=true for the file field input |
 |__:submit\_tag__          | HTML string containing code for the input or button that will handle form submission. This is optional and if not included a basic submit tag will be generated for the form. |
 |__:submit\_tag\_value__   | Override the value of the standard generated submit tag. _Default:_ "Upload" |
 |__:submit\_tag\_options__ | Hash of options passed to the submit_tag generator. |

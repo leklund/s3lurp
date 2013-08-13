@@ -1,3 +1,8 @@
+v0.4.5
+
+* add file_fields_only option and s3_direct_form_fields method
+* add no_file_input option
+
 v0.4.4
 
 * add multiple_files option to add multiple=true attribute to the file input

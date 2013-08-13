@@ -135,6 +135,8 @@ to the helper in a hash.
 |__:submit\_tag__          | HTML string containing code for the input or button that will handle form submission. This is optional and if not included a basic submit tag will be generated for the form. |
 |__:submit\_tag\_value__   | Override the value of the standard generated submit tag. _Default:_ "Upload" |
 |__:submit\_tag\_options__ | Hash of options passed to the submit_tag generator. |
+|__:no\_file\_input__      | When set to true, will not generate ae file field input. Useful when combined with form_fields_only |
+|__:form\_fields\_only__   | Will generate only the form fields and not the form tag or the submit tag. Useful for customization. |
 
 
 ### Examples

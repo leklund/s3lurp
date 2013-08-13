@@ -19,8 +19,13 @@ module S3lurp
     NON_FIELD_OPTIONS = %w( s3_bucket aws_secret_key
                            max_file_size min_file_size
                            amz_meta_tags minutes_valid
-                           form_html_options file_field_tag_accept multiple_files
+                           form_html_options file_field_tag_accept multiple_files form_fields_only no_file_input
                            submit_tag submit_tag_value submit_tag_options).map(&:to_sym)
+
+    def s3_direct_form_fields(opt ={})
+      s3_direct_form_tag(opt.merge!({:form_fields_only => true}))
+    end
+
 
     def s3_direct_form_tag(opt = {})
       options = (NON_FIELD_OPTIONS + HIDDEN_FIELD_MAP.keys).each_with_object({}) do |i, h|
@@ -60,13 +65,18 @@ module S3lurp
       amz_meta_tags.merge! security_fields
       submit = s3_generate_submit_tag(options)
       file = s3_generate_file_field_tag(options)
-      form_tag("http://s3.amazonaws.com/#{options[:s3_bucket]}",  {:authenticity_token => false, :method => 'POST', :multipart => true}.merge(options[:form_html_options])) do
-        (
+      form_content = (
         hidden_fields.map{|k,v| hidden_field_tag(HIDDEN_FIELD_MAP[k],v, {:id => nil})}.join.html_safe +
-        amz_meta_tags.map{|k,v| hidden_field_tag(k,v,{:id => nil})}.join.html_safe +
-        field_set_tag(nil,:class=>"s3lurp_file") {file} +
-        field_set_tag(nil,:class=>"s3lurp_submit") {submit.html_safe}
-        )
+        amz_meta_tags.map{|k,v| hidden_field_tag(k,v,{:id => nil})}.join.html_safe
+      )
+      form_content << field_set_tag(nil,:class=>"s3lurp_file") {file} unless options[:no_file_input]
+      if options[:form_fields_only]
+        form_content
+      else
+        form_tag("http://s3.amazonaws.com/#{options[:s3_bucket]}",  {:authenticity_token => false, :method => 'POST', :multipart => true}.merge(options[:form_html_options])) do
+          ( form_content +
+            field_set_tag(nil,:class=>"s3lurp_submit") {submit.html_safe} )
+        end
       end
     end
 

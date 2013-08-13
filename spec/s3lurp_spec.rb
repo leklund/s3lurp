@@ -23,6 +23,40 @@ describe S3lurp::ViewHelpers do
     form.should include(%(name="file"), %(type="file"))
   end
 
+  it "should return just fields and no form tag when form_fields_only is set" do
+    S3lurp.configure do |config|
+      config.aws_access_key = nil
+      config.aws_secret_key = nil
+    end
+    form = view.s3_direct_form_tag({:key => '/files/s3lurp/lib/s3lurp.rb', :form_fields_only => true})
+    (!!form.match(/<form.*?>/)).should be_false
+    form.should include(%(name="key"), %(type="hidden"))
+    form.should include(%(name="file"), %(type="file"))
+  end
+
+ it "should return just fields and no form tag when s3_direct_form_fields is called" do
+    S3lurp.configure do |config|
+      config.aws_access_key = nil
+      config.aws_secret_key = nil
+    end
+    form = view.s3_direct_form_fields({:key => '/files/s3lurp/lib/s3lurp.rb'})
+    (!!form.match(/<form.*?>/)).should be_false
+    form.should include(%(name="key"), %(type="hidden"))
+    form.should include(%(name="file"), %(type="file"))
+  end
+
+ it "should return a form without a file input when no_file_input is set" do
+    S3lurp.configure do |config|
+      config.aws_access_key = nil
+      config.aws_secret_key = nil
+    end
+    form = view.s3_direct_form_tag({:key => '/files/s3lurp/lib/s3lurp.rb', :no_file_input => true})
+    (!!form.match(/<form.*?>/)).should be_true
+    form.should include(%(name="key"), %(type="hidden"))
+    form.should_not include(%(name="file"), %(type="file"))
+  end
+
+
   it "should return a form with a policy and signature and my meta tags" do
     S3lurp.configure do |config|
       config.s3_bucket = "bucket_o_stuff"
@@ -56,6 +90,41 @@ describe S3lurp::ViewHelpers do
     form.should include(%(name="Content-Disposition"), %(type="hidden"), %(value="attachment"))
 
   end
+
+  it "should return fields with a policy and signature and my meta tags" do
+    S3lurp.configure do |config|
+      config.s3_bucket = "bucket_o_stuff"
+      config.aws_access_key = 'oingoboingo'
+      config.aws_secret_key = "qwerty5678_"
+    end
+    form = view.s3_direct_form_fields({
+      :key => '/some/key.pl',
+      :acl => 'public-read',
+      :success_action_redirect => 'http://foobar.com/thanks',
+      :success_action_status => 204,
+      :content_disposition => "attachment",
+      :min_file_size => 1024,
+      :max_file_size => 6291456,
+      :minutes_valid => 333,
+      :amz_meta_tags => {
+        :foo => "bar",
+        :parent_id => 42
+      },
+      :form_html_options => {:class => "myclass", :id => "s3lurp_form"}
+    })
+    (!!form.match(/<form.*?>/)).should be_false
+    form.should_not include(%(class="myclass"))
+    form.should_not include(%(id="s3lurp_form"))
+    form.should include(%(name="key"), %(value="/some/key.pl"))
+    form.should include(%(name="AWSAccessKeyId"), %(value="oingoboingo"))
+    form.should include(%(name="file"), %(type="file"))
+    form.should include(%(name="policy"), %(type="hidden"))
+    form.should include(%(name="x-amz-meta-foo"), %(value="bar"))
+    form.should include(%(name="x-amz-meta-parent_id"), %(value="42"))
+    form.should include(%(name="Content-Disposition"), %(type="hidden"), %(value="attachment"))
+
+  end
+
 
   it 'should return valid json from the generate policy method and should have the keys I send it' do
     json = view.s3_generate_policy({:key => "/foo/bar/${filename}", :acl => 'public-read'}, 
